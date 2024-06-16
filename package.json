@@ -1,0 +1,30 @@
+{
+  "name": "path-helper-util",
+  "version": "1.0.0",
+  "description": "A utility for managing and retrieving navigation paths.",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeonLonsdale/path-helper-util.git"
+  },
+  "keywords": [
+    "navigation",
+    "paths",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeonLonsdale/path-helper-util/issues"
+  },
+  "homepage": "https://github.com/LeonLonsdale/path-helper-util#readme",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}
