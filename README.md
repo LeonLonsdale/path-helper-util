@@ -116,6 +116,57 @@ pathHelper.registerPath(
 );
 ```
 
+When registering your paths you need to ensure the registerPath calls are exeecuted. To do this you have 2 options. The following examples are based on NextJS:
+
+#### Register Calls in the root Layout.tsx
+
+```typescript
+export default function Layout({ children }) {
+  // Register paths directly
+  pathHelper.registerPath("home", () => "/", "Home", ["main"]);
+  pathHelper.registerPath("about", () => "/about", "About", ["main"]);
+  pathHelper.registerPath(
+    "userSettings",
+    (userId?: string) => `/user/${userId}/settings`,
+    "User Settings",
+    ["main", "footer"],
+    "user"
+  );
+}
+```
+
+#### Dynamically Import a Registrations File
+
+Alternatively you could create a registrations file, such as `paths-registration.ts` and dynamically import it in the layout.tsx:
+
+```typescript
+// lib/paths-registration.tsx
+import { pathHelper } from "path-helper-util";
+
+pathHelper.registerPath("home", () => "/", "Home", ["main"]);
+pathHelper.registerPath("about", () => "/about", "About", ["main"]);
+pathHelper.registerPath(
+  "userSettings",
+  (userId?: string) => `/user/${userId}/settings`,
+  "User Settings",
+  ["main", "footer"],
+  "user"
+);
+
+// layout.tsx
+
+export default function Layout({ children }) {
+  import("../lib/path-registration")
+    .then(() => {
+      console.log("Path registrations have been loaded.");
+      console.log("Registered paths:", pathHelper.getPaths());
+    })
+    .catch((error) => {
+      console.error("Error loading path registrations:", error);
+    });
+}
+```
+
 ### Extracting Paths by Navigation Name
 
 To extract paths by a specific navigation name, use the `extractNavLinks` method. For example:
