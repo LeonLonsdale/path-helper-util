@@ -154,9 +154,9 @@ pathHelper.registerPath(
 );
 
 // layout.tsx
-
-export default function Layout({ children }) {
-  import("../lib/path-registration")
+// note: the layout must be async.
+export default async function Layout({ children }) {
+  await import("@/lib/path-registration")
     .then(() => {
       console.log("Path registrations have been loaded.");
       console.log("Registered paths:", pathHelper.getPaths());
@@ -164,6 +164,29 @@ export default function Layout({ children }) {
     .catch((error) => {
       console.error("Error loading path registrations:", error);
     });
+}
+```
+
+or you can create and call a registration function:
+
+```typescript
+// layout.tsx
+async function registerPaths() {
+  try {
+    await import("@/lib/path-registration");
+    console.log("Path registrations have been loaded.");
+  } catch (error) {
+    console.error("Error loading path registrations:", error);
+  }
+}
+
+registerPaths().then(() => {
+  // Example usage of the pathHelper
+  console.log("Registered paths:", pathHelper.getPaths());
+});
+
+export default function Layout({ children }) {
+  //...
 }
 ```
 
