@@ -100,58 +100,59 @@ A singleton instance of the `PathHelperUtil` class to manage and retrieve naviga
 
 ### Registering a Path
 
-To register a new path, use the `registerPath` method. The example below demonstrates the registration of a userSettings path that could be used to create a Profile or Settings link within the project. When registering, we specify that the return path function expects to receive the userId. We also state that the link will be used in the `main` navigation list, and that it's part of the `user` group.
+To register a new path, use the `registerPath` method.
+
+This method has the following signature:
+
+`registerPath(key: string, pathFunction: PathFunction, label: string, navs: string[], group?: string): void`
+
+- `key` is your identifier within the paths object that this utility uses to manage your paths. You can use it to get the path later using `getPath('key')`.
+- `pathFunction` is a callback that returns the path. This can accept data for dynamic routes.
+- `label` is the text that you can use in your links later.
+- `navs` accepts `string[]`. These are the names of your navigations such as `mainNav`, `sidebar`, etc., You can use these navigation names in `extractNavLinks()` to create an array of path to create your nav list.
+- `group?` is optional, but is used to categorise your paths. For example you may have `/blog`, `/blog/[id]`, `/blog/new`. The group allows you to get a list of paths within this group category using `extractGroupPaths()`.
 
 Setting descriptive navigation lists and groups can help to create navigation lists using the `extractNavLinks` and `extractGroupPaths` methods.
 
 ```typescript
 import { pathHelper } from "path-helper-util";
 
+// static path
+pathHelper.registerPath("home", () => "/", "Home", ["main"]);
+
+// dynamic
 pathHelper.registerPath(
-  "userSettings",
-  (userId: string) => `/user/${userId}/settings`,
-  "User Settings",
+  "profile",
+  (userId: string) => `/user/${userId}`,
+  "Profile",
   ["main"],
   "user"
 );
 ```
 
-When registering your paths you need to ensure the registerPath calls are exeecuted. To do this you have 2 options. The following examples are based on NextJS:
+When registering your paths we need to ensure the `registerPath` calls are executed.
+
+We have a few ways to do this:
 
 #### Register Calls in the root Layout.tsx
 
 ```typescript
 export default function Layout({ children }) {
-  // Register paths directly
   pathHelper.registerPath("home", () => "/", "Home", ["main"]);
-  pathHelper.registerPath("about", () => "/about", "About", ["main"]);
-  pathHelper.registerPath(
-    "userSettings",
-    (userId?: string) => `/user/${userId}/settings`,
-    "User Settings",
-    ["main", "footer"],
-    "user"
-  );
+  // ...
 }
 ```
 
 #### Dynamically Import a Registrations File
 
-Alternatively you could create a registrations file, such as `paths-registration.ts` and dynamically import it in the layout.tsx:
+We can also create a new path registration file, such as `lib/path-registration.ts`. We put all of our `registerPath` calls in there, and then dynamically import it.
 
 ```typescript
 // lib/paths-registration.tsx
 import { pathHelper } from "path-helper-util";
 
 pathHelper.registerPath("home", () => "/", "Home", ["main"]);
-pathHelper.registerPath("about", () => "/about", "About", ["main"]);
-pathHelper.registerPath(
-  "userSettings",
-  (userId?: string) => `/user/${userId}/settings`,
-  "User Settings",
-  ["main", "footer"],
-  "user"
-);
+// ...
 
 // layout.tsx
 // note: the layout must be async.
@@ -167,7 +168,7 @@ export default async function Layout({ children }) {
 }
 ```
 
-or you can create and call a registration function:
+or we can create and call a registration function:
 
 ```typescript
 // layout.tsx
