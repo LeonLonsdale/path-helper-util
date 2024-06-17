@@ -1,6 +1,8 @@
 # Path Helper Util
 
-A TypeScript utility for managing and retrieving navigation paths within your application. This package allows you to define, register, and extract paths based on navigation names and groups, providing a centralised and type-safe way to handle routes.
+Sometimes our web apps have a lot of routes. This leads to us using anchor tags or link components throughout our projects. But what if we change one of those routes later? Do we want to manually have to sift through our code to find where we've created a link to that route so that we can update it? Wouldn't it be nicer if we had our paths in a central place so that we can update it once and that update is reflected throughout the project?
+
+Path Helper Util does just that, it's a utility for managing and retrieving navigation paths within your application. This package allows you to define, register, and extract paths based on navigation names and groups, providing a centralised way to handle routes. It's also written in typescript, so it's type safe, too.
 
 ## Table of Contents
 
@@ -16,18 +18,16 @@ A TypeScript utility for managing and retrieving navigation paths within your ap
 To install the package, run:
 
 ```sh
-npm install path-helper-util
+npm i path-helper-util
 ```
-
-## Introduction
-
-This package provides a set of functions and types to manage and retrieve navigation paths for your application. By centralising path definitions, you can easily register, retrieve, and organise routes, ensuring consistency and type safety across your application.
 
 ## Exported Types
 
+A number of types are exposed for your use:
+
 ### `PathFunction`
 
-Represents a function that returns a string path.
+Represents a function that returns a string path. These are used to return paths when required.
 
 ```typescript
 type PathFunction = (...args: (string | number | undefined)[]) => string;
@@ -35,7 +35,7 @@ type PathFunction = (...args: (string | number | undefined)[]) => string;
 
 ### `Path`
 
-Represents a path object.
+Represents a path object. You'll follow this structure when registering and extracting a path.
 
 ```typescript
 interface Path {
@@ -48,7 +48,7 @@ interface Path {
 
 ### `Paths`
 
-Represents a collection of paths.
+Represents a collection of paths. If you extract all paths as a single object using `.getPaths()`, this is what you'll get.
 
 ```typescript
 interface Paths {
@@ -58,7 +58,7 @@ interface Paths {
 
 ### `NavLink`
 
-Represents a navigation link.
+Represents a navigation link. This type represents the outputs of extraction functions.
 
 ```typescript
 interface NavLink {
